@@ -1,11 +1,18 @@
 import express from 'express';
 
-const root = express.Router();
+const app = express.Router();
 
-root.get('/', (req, res) =>
+app.get('/', (req, res) =>
   res.status(200).json({
     message: 'Welcome to express-ts',
   }),
 );
 
-export default root;
+app.post('/', (req, res) => {
+  res.status(200).json({
+    message: 'Response from express-ts',
+    request: req.body,
+  });
+});
+
+export default app;

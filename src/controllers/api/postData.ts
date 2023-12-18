@@ -25,3 +25,12 @@ const postData: RequestHandler = async (req: any, res) => {
 };
 
 export default postData;
+
+// db.employeeRole.create({
+//   data: {
+//     RoleId: 1,
+//     EmployeeId: 2,
+//     Role: 'Admin',
+//     Employee: 'Someone',
+//   },
+// });

@@ -13,6 +13,7 @@
     "clean": "rm -rf dist",
     "dev": "prisma generate && nodemon",
     "introspect": "prisma db pull",
+    "studio": "prisma studio",
     "lint": "npx eslint src",
     "typecheck": "tsc --noEmit",
     "format": "prettier --check \"{*.js,!(node*)**/*.ts}\"",

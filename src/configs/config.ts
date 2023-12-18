@@ -10,17 +10,6 @@ const config = {
     development: process.env.DEV_ORIGIN ?? '*',
     production: process.env.PROD_ORIGIN ?? 'none',
   },
-  sql: {
-    server: process.env.AZURE_SERVER ?? '',
-    database: process.env.AZURE_DATABASE ?? '',
-    user: process.env.AZURE_USER ?? '',
-    password: process.env.AZURE_PASSWORD ?? '',
-    driver: 'msnodesqlv8',
-    options: {
-      encrypt: true,
-      trustedConnection: true,
-    },
-  },
 };
 
 export default config;

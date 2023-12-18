@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model License {
+  Id             Int    @id @default(autoincrement())
+  Name           String
+  maxActiveUsers Int
+}
+
+model GlobalPicklistValue {
+  Id               Int    @id @default(autoincrement())
+  GlobalPicklistId Int
+  Name             String @db.VarChar(40)
+}
+
+model Login {
+  Id           Int      @id @default(autoincrement())
+  SessionID    String   @db.VarChar(255)
+  User         Int
+  Start        DateTime
+  Closed       DateTime
+  Status       Boolean
+  Organization Int
+}
+
+model Organization {
+  id            Int     @id @default(autoincrement())
+  name          String  @db.VarChar(40)
+  comercialName String? @db.VarChar(40)
+  contact       String? @db.VarChar(40)
+  email         String  @db.VarChar(320)
+  streetAddress String? @db.VarChar(255)
+  zip           String? @db.VarChar(40)
+  city          String? @db.VarChar(40)
+  countryId     Int
+}
+
+model Employee {
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(40)
+  wageHour       Decimal  @db.Decimal(5, 2)
+  organizationId Int?
+  birthday       DateTime @db.Date
+  contact        String   @db.VarChar(40)
+  email          String   @db.VarChar(320)
+}

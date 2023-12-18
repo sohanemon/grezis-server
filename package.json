@@ -11,7 +11,7 @@
     "start": "node dist/src/server.js",
     "build": "rm -rf dist && tsc -p tsconfig.json",
     "clean": "rm -rf dist",
-    "dev": "nodemon",
+    "dev": "prisma generate && nodemon",
     "lint": "npx eslint src",
     "typecheck": "tsc --noEmit",
     "format": "prettier --check \"{*.js,!(node*)**/*.ts}\"",
@@ -19,6 +19,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@prisma/client": "5.7.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -40,6 +41,7 @@
     "eslint": "^8.55.0",
     "nodemon": "^3.0.2",
     "prettier": "3.1.1",
+    "prisma": "^5.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

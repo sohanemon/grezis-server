@@ -1,17 +1,24 @@
-import sql from 'mssql';
+import sql, { ConnectionPool } from 'mssql';
 import config from '../configs/config.js';
+
+let connection: ConnectionPool;
 
 export async function connect() {
   try {
-    sql.connect(config.sql, (err) => {
-      if (err) {
-        console.error('Error connection to SQL Server', err);
-      } else {
-        console.log('Connection successfully :)');
-      }
-    });
-    console.log('Database connection successful');
+    connection = await sql.connect(config.sql);
+    console.log('Connection successfully :)');
   } catch (error) {
     console.error(`Error connecting to database: ${JSON.stringify(error)}`);
+  }
+}
+
+export async function getEmployee() {
+  try {
+    await connect();
+    const request = new sql.Request(connection);
+    const res = await request.query('SELECT * FROM employee');
+    console.log('🛑 ~ getEmployee ~ res:', res);
+  } catch (error) {
+    console.error(`Error executing query: ${JSON.stringify(error)}`);
   }
 }

@@ -9,14 +9,16 @@ const postData: RequestHandler = async (req: any, res) => {
       .json({ error: `Model ${model.toUpperCase()} does not exist` });
   }
   try {
-    await (db[model] as any).create({
+    const data = await (db[model] as any).create({
       data: req.body,
     });
+
     res.status(200).json({
       success: true,
+      data,
     });
   } catch (e) {
-    res.status(500).json({ error: 'An error occurred while posting data' });
+    res.status(500).json({ error: 'An error occurred while creating data' });
   }
 };
 

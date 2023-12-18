@@ -18,7 +18,9 @@ const postData: RequestHandler = async (req: any, res) => {
       data,
     });
   } catch (e) {
-    res.status(500).json({ error: 'An error occurred while creating data' });
+    res
+      .status(500)
+      .json({ message: 'An error occurred while creating data', error: e });
   }
 };
 

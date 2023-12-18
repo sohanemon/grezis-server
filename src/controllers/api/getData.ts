@@ -12,7 +12,9 @@ const getData: RequestHandler = async (req: any, res) => {
     const data = await (db[model] as any).findMany();
     res.status(200).json(data);
   } catch (e) {
-    res.status(500).json({ error: 'An error occurred while retrieving data' });
+    res
+      .status(500)
+      .json({ message: 'An error occurred while retrieving data', error: e });
   }
 };
 

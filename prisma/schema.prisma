@@ -7,44 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model GlobalPicklistValue {
-  Id               Int             @id(map: "PK__GlobalPi__3214EC07C4A413B4") @default(autoincrement())
-  GlobalPicklistId Int?
-  Name             String?         @db.VarChar(40)
-  GlobalPicklist   GlobalPicklist? @relation(fields: [GlobalPicklistId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_GlobalPicklistValue.GlobalPicklistId")
-  Organization     Organization[]
-}
-
-model Login {
-  Id                                            Int           @id(map: "PK__Login__3214EC07F0F4DC72") @default(autoincrement())
-  SessionID                                     String?       @db.VarChar(255)
-  User                                          Int?
-  Start                                         DateTime?     @db.DateTime
-  Closed                                        DateTime?     @db.DateTime
-  Status                                        Boolean?
-  Organization                                  Int?
-  qtActiveUsers                                 Int?
-  Organization_Login_OrganizationToOrganization Organization? @relation("Login_OrganizationToOrganization", fields: [Organization], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Login.Organization")
-  User_Login_UserToUser                         User?         @relation("Login_UserToUser", fields: [User], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Login.User")
-}
-
-model Organization {
-  Id                                     Int                  @id(map: "PK__Organiza__3214EC073A72B5CF") @default(autoincrement())
-  Name                                   String?              @db.VarChar(40)
-  ComercialName                          String?              @db.VarChar(40)
-  Contact                                String?              @db.VarChar(40)
-  Email                                  String?              @db.VarChar(320)
-  StreetAddress                          String?              @db.VarChar(255)
-  Zip                                    String?              @db.VarChar(40)
-  City                                   String?              @db.VarChar(40)
-  Country                                Int?
-  Employee                               Employee[]
-  Login_Login_OrganizationToOrganization Login[]              @relation("Login_OrganizationToOrganization")
-  GlobalPicklistValue                    GlobalPicklistValue? @relation(fields: [Country], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Organization.Country")
-  Role                                   Role[]
-  User                                   User[]
-}
-
 model Employee {
   Id                                 Int            @id(map: "PK__Employee__3214EC07C5FCFE74") @default(autoincrement())
   Name                               String?        @db.VarChar(40)
@@ -81,6 +43,44 @@ model GlobalPicklist {
   Id                  Int                   @id(map: "PK__GlobalPi__3214EC07D941324A") @default(autoincrement())
   Name                String?               @db.VarChar(40)
   GlobalPicklistValue GlobalPicklistValue[]
+}
+
+model GlobalPicklistValue {
+  Id               Int             @id(map: "PK__GlobalPi__3214EC07C4A413B4") @default(autoincrement())
+  GlobalPicklistId Int?
+  Name             String?         @db.VarChar(40)
+  GlobalPicklist   GlobalPicklist? @relation(fields: [GlobalPicklistId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_GlobalPicklistValue.GlobalPicklistId")
+  Organization     Organization[]
+}
+
+model Login {
+  Id                                            Int           @id(map: "PK__Login__3214EC07F0F4DC72") @default(autoincrement())
+  SessionID                                     String?       @db.VarChar(255)
+  User                                          Int?
+  Start                                         DateTime?     @db.DateTime
+  Closed                                        DateTime?     @db.DateTime
+  Status                                        Boolean?
+  Organization                                  Int?
+  qtActiveUsers                                 Int?
+  Organization_Login_OrganizationToOrganization Organization? @relation("Login_OrganizationToOrganization", fields: [Organization], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Login.Organization")
+  User_Login_UserToUser                         User?         @relation("Login_UserToUser", fields: [User], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Login.User")
+}
+
+model Organization {
+  Id                                     Int                  @id(map: "PK__Organiza__3214EC073A72B5CF") @default(autoincrement())
+  Name                                   String?              @db.VarChar(40)
+  ComercialName                          String?              @db.VarChar(40)
+  Contact                                String?              @db.VarChar(40)
+  Email                                  String?              @db.VarChar(320)
+  StreetAddress                          String?              @db.VarChar(255)
+  Zip                                    String?              @db.VarChar(40)
+  City                                   String?              @db.VarChar(40)
+  Country                                Int?
+  Employee                               Employee[]
+  Login_Login_OrganizationToOrganization Login[]              @relation("Login_OrganizationToOrganization")
+  GlobalPicklistValue                    GlobalPicklistValue? @relation(fields: [Country], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Organization.Country")
+  Role                                   Role[]
+  User                                   User[]
 }
 
 model Profile {

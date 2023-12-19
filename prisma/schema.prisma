@@ -8,21 +8,38 @@ datasource db {
 }
 
 model Employee {
-  Id                                 Int            @id(map: "PK__Employee__3214EC07C5FCFE74") @default(autoincrement())
-  Name                               String?        @db.VarChar(40)
-  WageHour                           Decimal?       @db.Decimal(5, 2)
+  Id                                 Int             @id(map: "PK__Employee__3214EC07C5FCFE74") @default(autoincrement())
+  Name                               String?         @db.VarChar(40)
+  WageHour                           Decimal?        @db.Decimal(5, 2)
   OrganizationId                     Int?
-  Birthday                           DateTime?      @db.Date
-  Contact                            String?        @db.VarChar(40)
-  Email                              String?        @db.VarChar(320)
+  Birthday                           DateTime?       @db.Date
+  Contact                            String?         @db.VarChar(40)
+  Email                              String?         @db.VarChar(320)
   CreatedBy                          Int?
-  CreatedAt                          DateTime?      @db.DateTime
+  CreatedAt                          DateTime?       @default(now()) @db.DateTime
   LastModifiedBy                     Int?
-  LastModifiedAt                     DateTime?      @db.DateTime
-  User_Employee_CreatedByToUser      User?          @relation("Employee_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.CreatedBy")
-  User_Employee_LastModifiedByToUser User?          @relation("Employee_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.LastModifiedBy")
-  Organization                       Organization?  @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.OrganizationId")
+  LastModifiedAt                     DateTime?       @default(now()) @db.DateTime
+  User_Employee_CreatedByToUser      User?           @relation("Employee_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.CreatedBy")
+  User_Employee_LastModifiedByToUser User?           @relation("Employee_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.LastModifiedBy")
+  Organization                       Organization?   @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.OrganizationId")
+  EmployeeGroup                      EmployeeGroup[]
   EmployeeRole                       EmployeeRole[]
+  Weighing                           Weighing[]
+  WorkTime                           WorkTime[]
+}
+
+model EmployeeGroup {
+  Id                                      Int       @id(map: "PK__Employee__3214EC07A6F1577B") @default(autoincrement())
+  EmployeeId                              Int?
+  GroupId                                 Int?
+  CreatedBy                               Int?
+  CreatedAt                               DateTime? @default(now()) @db.DateTime
+  LastModifiedBy                          Int?
+  LastModifiedAt                          DateTime? @default(now()) @db.DateTime
+  User_EmployeeGroup_CreatedByToUser      User?     @relation("EmployeeGroup_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.CreatedBy")
+  Employee                                Employee? @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.EmployeeId")
+  Group                                   Group?    @relation(fields: [GroupId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.GroupId")
+  User_EmployeeGroup_LastModifiedByToUser User?     @relation("EmployeeGroup_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.LastModifiedBy")
 }
 
 model EmployeeRole {
@@ -30,9 +47,9 @@ model EmployeeRole {
   RoleId                                 Int?
   EmployeeId                             Int?
   CreatedBy                              Int?
-  CreatedAt                              DateTime? @db.DateTime
+  CreatedAt                              DateTime? @default(now()) @db.DateTime
   LastModifiedBy                         Int?
-  LastModifiedAt                         DateTime? @db.DateTime
+  LastModifiedAt                         DateTime? @default(now()) @db.DateTime
   User_EmployeeRole_CreatedByToUser      User?     @relation("EmployeeRole_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.CreatedBy")
   Employee                               Employee? @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.EmployeeId")
   User_EmployeeRole_LastModifiedByToUser User?     @relation("EmployeeRole_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.LastModifiedBy")
@@ -53,6 +70,33 @@ model GlobalPicklistValue {
   Organization     Organization[]
 }
 
+model Group {
+  Id                              Int             @id(map: "PK__Group__3214EC079F4499BF") @default(autoincrement())
+  Name                            String?         @db.VarChar(40)
+  OrganizationId                  Int?
+  CreatedBy                       Int?
+  CreatedAt                       DateTime?       @default(now()) @db.DateTime
+  LastModifiedBy                  Int?
+  LastModifiedAt                  DateTime?       @default(now()) @db.DateTime
+  EmployeeGroup                   EmployeeGroup[]
+  User_Group_CreatedByToUser      User?           @relation("Group_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Group.CreatedBy")
+  User_Group_LastModifiedByToUser User?           @relation("Group_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Group.LastModifiedBy")
+  Organization                    Organization?   @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Group.OrganizationId")
+}
+
+model License {
+  Id                                Int                   @id(map: "PK__License__3214EC0705676CA8") @default(autoincrement())
+  Name                              String?               @db.VarChar(40)
+  maxActiveUsers                    Int?
+  CreatedBy                         Int?
+  CreatedAt                         DateTime?             @default(now()) @db.DateTime
+  LastModifiedBy                    Int?
+  LastModifiedAt                    DateTime?             @default(now()) @db.DateTime
+  User_License_CreatedByToUser      User?                 @relation("License_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_License.CreatedBy")
+  User_License_LastModifiedByToUser User?                 @relation("License_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_License.LastModifiedBy")
+  OrganizationLicense               OrganizationLicense[]
+}
+
 model Login {
   Id                                            Int           @id(map: "PK__Login__3214EC07F0F4DC72") @default(autoincrement())
   SessionID                                     String?       @db.VarChar(255)
@@ -67,29 +111,79 @@ model Login {
 }
 
 model Organization {
-  Id                                     Int                  @id(map: "PK__Organiza__3214EC073A72B5CF") @default(autoincrement())
-  Name                                   String?              @db.VarChar(40)
-  ComercialName                          String?              @db.VarChar(40)
-  Contact                                String?              @db.VarChar(40)
-  Email                                  String?              @db.VarChar(320)
-  StreetAddress                          String?              @db.VarChar(255)
-  Zip                                    String?              @db.VarChar(40)
-  City                                   String?              @db.VarChar(40)
+  Id                                     Int                   @id(map: "PK__Organiza__3214EC073A72B5CF") @default(autoincrement())
+  Name                                   String?               @db.VarChar(40)
+  ComercialName                          String?               @db.VarChar(40)
+  Contact                                String?               @db.VarChar(40)
+  Email                                  String?               @db.VarChar(320)
+  StreetAddress                          String?               @db.VarChar(255)
+  Zip                                    String?               @db.VarChar(40)
+  City                                   String?               @db.VarChar(40)
   Country                                Int?
   Employee                               Employee[]
-  Login_Login_OrganizationToOrganization Login[]              @relation("Login_OrganizationToOrganization")
-  GlobalPicklistValue                    GlobalPicklistValue? @relation(fields: [Country], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Organization.Country")
+  Group                                  Group[]
+  Login_Login_OrganizationToOrganization Login[]               @relation("Login_OrganizationToOrganization")
+  GlobalPicklistValue                    GlobalPicklistValue?  @relation(fields: [Country], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Organization.Country")
+  OrganizationLicense                    OrganizationLicense[]
+  Plantation                             Plantation[]
+  Product                                Product[]
   Role                                   Role[]
   User                                   User[]
+  WorkTime                               WorkTime[]
+}
+
+model OrganizationLicense {
+  Id                                            Int           @id(map: "PK__Organiza__3214EC07E5A59B19") @default(autoincrement())
+  OrganizationId                                Int?
+  LicenseId                                     Int?
+  StartDate                                     DateTime?     @db.Date
+  EndDate                                       DateTime?     @db.Date
+  qtActiveUsers                                 Int?
+  CreatedBy                                     Int?
+  CreatedAt                                     DateTime?     @default(now()) @db.DateTime
+  LastModifiedBy                                Int?
+  LastModifiedAt                                DateTime?     @default(now()) @db.DateTime
+  User_OrganizationLicense_CreatedByToUser      User?         @relation("OrganizationLicense_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.CreatedBy")
+  User_OrganizationLicense_LastModifiedByToUser User?         @relation("OrganizationLicense_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.LastModifiedBy")
+  License                                       License?      @relation(fields: [LicenseId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.LicenseId")
+  Organization                                  Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.OrganizationId")
+}
+
+model Plantation {
+  Id                                   Int           @id(map: "PK__Plantati__3214EC07E9BC928A") @default(autoincrement())
+  Name                                 String?       @db.VarChar(40)
+  OrganizationId                       Int?
+  CreatedBy                            Int?
+  CreatedAt                            DateTime?     @default(now()) @db.DateTime
+  LastModifiedBy                       Int?
+  LastModifiedAt                       DateTime?     @default(now()) @db.DateTime
+  User_Plantation_CreatedByToUser      User?         @relation("Plantation_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.CreatedBy")
+  User_Plantation_LastModifiedByToUser User?         @relation("Plantation_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.LastModifiedBy")
+  Organization                         Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.OrganizationId")
+  Weighing                             Weighing[]
+}
+
+model Product {
+  Id                                Int           @id(map: "PK__Product__3214EC079F2EB6FB") @default(autoincrement())
+  Name                              String?       @db.VarChar(40)
+  OrganizationId                    Int?
+  CreatedBy                         Int?
+  CreatedAt                         DateTime?     @default(now()) @db.DateTime
+  LastModifiedBy                    Int?
+  LastModifiedAt                    DateTime?     @default(now()) @db.DateTime
+  User_Product_CreatedByToUser      User?         @relation("Product_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.CreatedBy")
+  User_Product_LastModifiedByToUser User?         @relation("Product_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.LastModifiedBy")
+  Organization                      Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.OrganizationId")
+  Weighing                          Weighing[]
 }
 
 model Profile {
   Id             Int       @id(map: "PK__Profile__3214EC077B52CC8E") @default(autoincrement())
   Name           String?   @db.VarChar(40)
   CreatedBy      Int?
-  CreatedAt      DateTime? @db.DateTime
+  CreatedAt      DateTime? @default(now()) @db.DateTime
   LastModifiedBy Int?
-  LastModifiedAt DateTime? @db.DateTime
+  LastModifiedAt DateTime? @default(now()) @db.DateTime
   User           User[]
 }
 
@@ -98,9 +192,9 @@ model Role {
   Name                           String?        @db.VarChar(40)
   OrganizationId                 Int?
   CreatedBy                      Int?
-  CreatedAt                      DateTime?      @db.DateTime
+  CreatedAt                      DateTime?      @default(now()) @db.DateTime
   LastModifiedBy                 Int?
-  LastModifiedAt                 DateTime?      @db.DateTime
+  LastModifiedAt                 DateTime?      @default(now()) @db.DateTime
   EmployeeRole                   EmployeeRole[]
   User_Role_CreatedByToUser      User?          @relation("Role_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Role.CreatedBy")
   User_Role_LastModifiedByToUser User?          @relation("Role_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Role.LastModifiedBy")
@@ -108,29 +202,86 @@ model Role {
 }
 
 model User {
-  Id                                             Int            @id(map: "PK__User__3214EC07638E9D76") @default(autoincrement())
-  Name                                           String?        @db.VarChar(40)
-  Password                                       String?        @db.VarChar(40)
-  Email                                          String?        @db.VarChar(320)
-  Status                                         Boolean?
-  OrganizationId                                 Int?
-  ProfileId                                      Int?
-  Username                                       String?        @db.VarChar(40)
-  CreatedBy                                      Int?
-  CreatedAt                                      DateTime?      @db.DateTime
-  LastModifiedBy                                 Int?
-  LastModifiedAt                                 DateTime?      @db.DateTime
-  Employee_Employee_CreatedByToUser              Employee[]     @relation("Employee_CreatedByToUser")
-  Employee_Employee_LastModifiedByToUser         Employee[]     @relation("Employee_LastModifiedByToUser")
-  EmployeeRole_EmployeeRole_CreatedByToUser      EmployeeRole[] @relation("EmployeeRole_CreatedByToUser")
-  EmployeeRole_EmployeeRole_LastModifiedByToUser EmployeeRole[] @relation("EmployeeRole_LastModifiedByToUser")
-  Login_Login_UserToUser                         Login[]        @relation("Login_UserToUser")
-  Role_Role_CreatedByToUser                      Role[]         @relation("Role_CreatedByToUser")
-  Role_Role_LastModifiedByToUser                 Role[]         @relation("Role_LastModifiedByToUser")
-  User_User_CreatedByToUser                      User?          @relation("User_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.CreatedBy")
-  other_User_User_CreatedByToUser                User[]         @relation("User_CreatedByToUser")
-  User_User_LastModifiedByToUser                 User?          @relation("User_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.LastModifiedBy")
-  other_User_User_LastModifiedByToUser           User[]         @relation("User_LastModifiedByToUser")
-  Organization                                   Organization?  @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.OrganizationId")
-  Profile                                        Profile?       @relation(fields: [ProfileId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.ProfileId")
+  Id                                                           Int                   @id(map: "PK__User__3214EC07638E9D76") @default(autoincrement())
+  Name                                                         String?               @db.VarChar(40)
+  Password                                                     String?               @db.VarChar(40)
+  Email                                                        String?               @db.VarChar(320)
+  Status                                                       Boolean?
+  OrganizationId                                               Int?
+  ProfileId                                                    Int?
+  Username                                                     String?               @db.VarChar(40)
+  CreatedBy                                                    Int?
+  CreatedAt                                                    DateTime?             @default(now()) @db.DateTime
+  LastModifiedBy                                               Int?
+  LastModifiedAt                                               DateTime?             @default(now()) @db.DateTime
+  Employee_Employee_CreatedByToUser                            Employee[]            @relation("Employee_CreatedByToUser")
+  Employee_Employee_LastModifiedByToUser                       Employee[]            @relation("Employee_LastModifiedByToUser")
+  EmployeeGroup_EmployeeGroup_CreatedByToUser                  EmployeeGroup[]       @relation("EmployeeGroup_CreatedByToUser")
+  EmployeeGroup_EmployeeGroup_LastModifiedByToUser             EmployeeGroup[]       @relation("EmployeeGroup_LastModifiedByToUser")
+  EmployeeRole_EmployeeRole_CreatedByToUser                    EmployeeRole[]        @relation("EmployeeRole_CreatedByToUser")
+  EmployeeRole_EmployeeRole_LastModifiedByToUser               EmployeeRole[]        @relation("EmployeeRole_LastModifiedByToUser")
+  Group_Group_CreatedByToUser                                  Group[]               @relation("Group_CreatedByToUser")
+  Group_Group_LastModifiedByToUser                             Group[]               @relation("Group_LastModifiedByToUser")
+  License_License_CreatedByToUser                              License[]             @relation("License_CreatedByToUser")
+  License_License_LastModifiedByToUser                         License[]             @relation("License_LastModifiedByToUser")
+  Login_Login_UserToUser                                       Login[]               @relation("Login_UserToUser")
+  OrganizationLicense_OrganizationLicense_CreatedByToUser      OrganizationLicense[] @relation("OrganizationLicense_CreatedByToUser")
+  OrganizationLicense_OrganizationLicense_LastModifiedByToUser OrganizationLicense[] @relation("OrganizationLicense_LastModifiedByToUser")
+  Plantation_Plantation_CreatedByToUser                        Plantation[]          @relation("Plantation_CreatedByToUser")
+  Plantation_Plantation_LastModifiedByToUser                   Plantation[]          @relation("Plantation_LastModifiedByToUser")
+  Product_Product_CreatedByToUser                              Product[]             @relation("Product_CreatedByToUser")
+  Product_Product_LastModifiedByToUser                         Product[]             @relation("Product_LastModifiedByToUser")
+  Role_Role_CreatedByToUser                                    Role[]                @relation("Role_CreatedByToUser")
+  Role_Role_LastModifiedByToUser                               Role[]                @relation("Role_LastModifiedByToUser")
+  User_User_CreatedByToUser                                    User?                 @relation("User_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.CreatedBy")
+  other_User_User_CreatedByToUser                              User[]                @relation("User_CreatedByToUser")
+  User_User_LastModifiedByToUser                               User?                 @relation("User_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.LastModifiedBy")
+  other_User_User_LastModifiedByToUser                         User[]                @relation("User_LastModifiedByToUser")
+  Organization                                                 Organization?         @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.OrganizationId")
+  Profile                                                      Profile?              @relation(fields: [ProfileId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_User.ProfileId")
+  Weighing_Weighing_CreatedByToUser                            Weighing[]            @relation("Weighing_CreatedByToUser")
+  Weighing_Weighing_LastModifiedByToUser                       Weighing[]            @relation("Weighing_LastModifiedByToUser")
+  Weighing_Weighing_UserIdToUser                               Weighing[]            @relation("Weighing_UserIdToUser")
+  WorkTime_WorkTime_CreatedByToUser                            WorkTime[]            @relation("WorkTime_CreatedByToUser")
+  WorkTime_WorkTime_LastModifiedByToUser                       WorkTime[]            @relation("WorkTime_LastModifiedByToUser")
+}
+
+model Weighing {
+  Id                                 Int         @id(map: "PK__Weighing__3214EC07F746BE52") @default(autoincrement())
+  PlantationId                       Int?
+  UserId                             Int?
+  EmployeeId                         Int?
+  ProductId                          Int?
+  Weight                             Decimal?    @db.Decimal(11, 5)
+  CreatedBy                          Int?
+  CreatedAt                          DateTime?   @default(now()) @db.DateTime
+  LastModifiedBy                     Int?
+  LastModifiedAt                     DateTime?   @default(now()) @db.DateTime
+  User_Weighing_CreatedByToUser      User?       @relation("Weighing_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.CreatedBy")
+  Employee                           Employee?   @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.EmployeeId")
+  User_Weighing_LastModifiedByToUser User?       @relation("Weighing_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.LastModifiedBy")
+  Plantation                         Plantation? @relation(fields: [PlantationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.PlantationId")
+  Product                            Product?    @relation(fields: [ProductId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.ProductId")
+  User_Weighing_UserIdToUser         User?       @relation("Weighing_UserIdToUser", fields: [UserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.UserId")
+}
+
+model WorkTime {
+  Id                                 Int           @id(map: "PK__WorkTime__3214EC07EACEC190") @default(autoincrement())
+  UserId                             Int?
+  EmployeeId                         Int?
+  StartWork                          DateTime?     @db.DateTime
+  EndWork                            DateTime?     @db.DateTime
+  OrganizationId                     Int?
+  breakTime                          Int?
+  WorkDuration                       Int?
+  Status                             Boolean?
+  Notes                              String?       @db.VarChar(255)
+  CreatedBy                          Int?
+  CreatedAt                          DateTime?     @default(now()) @db.DateTime
+  LastModifiedBy                     Int?
+  LastModifiedAt                     DateTime?     @default(now()) @db.DateTime
+  User_WorkTime_CreatedByToUser      User?         @relation("WorkTime_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.CreatedBy")
+  Employee                           Employee?     @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.EmployeeId")
+  User_WorkTime_LastModifiedByToUser User?         @relation("WorkTime_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.LastModifiedBy")
+  Organization                       Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.OrganizationId")
 }

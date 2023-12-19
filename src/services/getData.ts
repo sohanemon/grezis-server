@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { db } from '../../lib/db.js';
+import { db } from '../lib/db.js';
 
 const getData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;

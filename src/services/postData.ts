@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { db } from '../../lib/db.js';
+import { db } from '../lib/db.js';
 
 const postData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;
@@ -25,3 +25,5 @@ const postData: RequestHandler = async (req: any, res) => {
 };
 
 export default postData;
+
+db.$queryRaw;

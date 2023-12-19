@@ -1,10 +1,14 @@
 import express from 'express';
-import getData from '../controllers/api/getData.js';
-import postData from '../controllers/api/postData.js';
+import { createController } from '../controllers/createController.js';
+import { deleteController } from '../controllers/deleteController.js';
+import { readController } from '../controllers/readController.js';
+import { updateController } from '../controllers/updateController.js';
 
 const router = express.Router();
 
-router.get('/:model', getData);
-router.post('/:model', postData);
+router.get('/:model', readController);
+router.post('/:model', createController);
+router.put('/:model', updateController);
+router.delete('/:model', deleteController);
 
 export default router;

@@ -1,14 +1,23 @@
 import { RequestHandler } from 'express';
 import { db } from '../lib/db.js';
+import { checkModelExistence } from '../lib/utils.js';
 
 const getData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;
-  if (model in db === false) {
-    return res
-      .status(400)
-      .json({ error: `Model ${model.toUpperCase()} does not exist` });
-  }
+  const id = parseInt(req.query.id);
+
+  checkModelExistence(model, res);
+
   try {
+    if (id) {
+      const data = await (db[model] as any).findUnique({
+        where: {
+          Id: id,
+        },
+      });
+      return res.status(200).json(data);
+    }
+
     const data = await (db[model] as any).findMany();
     res.status(200).json(data);
   } catch (e) {

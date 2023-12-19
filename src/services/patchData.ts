@@ -2,12 +2,17 @@ import { RequestHandler } from 'express';
 import { db } from '../lib/db.js';
 import { checkModelExistence } from '../lib/utils.js';
 
-const postData: RequestHandler = async (req: any, res) => {
+const patchData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;
+  const id = req.query.id;
+
   checkModelExistence(model, res);
 
   try {
-    const data = await (db[model] as any).create({
+    const data = await (db[model] as any).update({
+      where: {
+        Id: parseInt(id),
+      },
       data: req.body,
     });
 
@@ -22,4 +27,4 @@ const postData: RequestHandler = async (req: any, res) => {
   }
 };
 
-export default postData;
+export default patchData;

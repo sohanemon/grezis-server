@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import postData from '../services/postData.js';
+import patchData from '../services/patchData.js';
 
 export const updateController: RequestHandler = (...args) => {
-  return postData(...args);
+  return patchData(...args);
 };

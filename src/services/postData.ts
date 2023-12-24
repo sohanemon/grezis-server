@@ -17,7 +17,7 @@ const postData: RequestHandler = async (req: any, res) => {
     });
   } catch (e) {
     console.log('🛑 ~ constdeleteData:RequestHandler= ~ e:', e);
-    res
+    return res
       .status(500)
       .json({ message: 'An error occurred while creating data', error: e });
   }

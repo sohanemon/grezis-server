@@ -20,7 +20,9 @@ const patchData: RequestHandler = async (req: any, res) => {
       data,
     });
   } catch (e) {
-    res
+    console.log('🛑 ~ constdeleteData:RequestHandler= ~ e:', e);
+
+    return res
       .status(500)
       .json({ message: 'An error occurred while creating data', error: e });
   }

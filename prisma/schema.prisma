@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
@@ -16,9 +16,9 @@ model Employee {
   Contact                            String?         @db.VarChar(40)
   Email                              String?         @db.VarChar(320)
   CreatedBy                          Int?
-  CreatedAt                          DateTime?       @default(now())
+  CreatedAt                          DateTime?       @default(now()) @db.DateTime
   LastModifiedBy                     Int?
-  LastModifiedAt                     DateTime?       @default(now())
+  LastModifiedAt                     DateTime?       @default(now()) @db.DateTime
   User_Employee_CreatedByToUser      User?           @relation("Employee_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.CreatedBy")
   User_Employee_LastModifiedByToUser User?           @relation("Employee_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.LastModifiedBy")
   Organization                       Organization?   @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Employee.OrganizationId")
@@ -33,9 +33,9 @@ model EmployeeGroup {
   EmployeeId                              Int?
   GroupId                                 Int?
   CreatedBy                               Int?
-  CreatedAt                               DateTime? @default(now())
+  CreatedAt                               DateTime? @default(now()) @db.DateTime
   LastModifiedBy                          Int?
-  LastModifiedAt                          DateTime? @default(now())
+  LastModifiedAt                          DateTime? @default(now()) @db.DateTime
   User_EmployeeGroup_CreatedByToUser      User?     @relation("EmployeeGroup_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.CreatedBy")
   Employee                                Employee? @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.EmployeeId")
   Group                                   Group?    @relation(fields: [GroupId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeGroup.GroupId")
@@ -47,9 +47,9 @@ model EmployeeRole {
   RoleId                                 Int?
   EmployeeId                             Int?
   CreatedBy                              Int?
-  CreatedAt                              DateTime? @default(now())
+  CreatedAt                              DateTime? @default(now()) @db.DateTime
   LastModifiedBy                         Int?
-  LastModifiedAt                         DateTime? @default(now())
+  LastModifiedAt                         DateTime? @default(now()) @db.DateTime
   User_EmployeeRole_CreatedByToUser      User?     @relation("EmployeeRole_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.CreatedBy")
   Employee                               Employee? @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.EmployeeId")
   User_EmployeeRole_LastModifiedByToUser User?     @relation("EmployeeRole_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EmployeeRole.LastModifiedBy")
@@ -75,9 +75,9 @@ model Group {
   Name                            String?         @db.VarChar(40)
   OrganizationId                  Int?
   CreatedBy                       Int?
-  CreatedAt                       DateTime?       @default(now())
+  CreatedAt                       DateTime?       @default(now()) @db.DateTime
   LastModifiedBy                  Int?
-  LastModifiedAt                  DateTime?       @default(now())
+  LastModifiedAt                  DateTime?       @default(now()) @db.DateTime
   EmployeeGroup                   EmployeeGroup[]
   User_Group_CreatedByToUser      User?           @relation("Group_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Group.CreatedBy")
   User_Group_LastModifiedByToUser User?           @relation("Group_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Group.LastModifiedBy")
@@ -89,9 +89,9 @@ model License {
   Name                              String?               @db.VarChar(40)
   maxActiveUsers                    Int?
   CreatedBy                         Int?
-  CreatedAt                         DateTime?             @default(now())
+  CreatedAt                         DateTime?             @default(now()) @db.DateTime
   LastModifiedBy                    Int?
-  LastModifiedAt                    DateTime?             @default(now())
+  LastModifiedAt                    DateTime?             @default(now()) @db.DateTime
   User_License_CreatedByToUser      User?                 @relation("License_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_License.CreatedBy")
   User_License_LastModifiedByToUser User?                 @relation("License_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_License.LastModifiedBy")
   OrganizationLicense               OrganizationLicense[]
@@ -101,8 +101,8 @@ model Login {
   Id                                            Int           @id(map: "PK__Login__3214EC07F0F4DC72") @default(autoincrement())
   SessionID                                     String?       @db.VarChar(255)
   User                                          Int?
-  Start                                         DateTime?
-  Closed                                        DateTime?
+  Start                                         DateTime?     @db.DateTime
+  Closed                                        DateTime?     @db.DateTime
   Status                                        Boolean?
   Organization                                  Int?
   qtActiveUsers                                 Int?
@@ -140,9 +140,9 @@ model OrganizationLicense {
   EndDate                                       DateTime?     @db.Date
   qtActiveUsers                                 Int?
   CreatedBy                                     Int?
-  CreatedAt                                     DateTime?     @default(now())
+  CreatedAt                                     DateTime?     @default(now()) @db.DateTime
   LastModifiedBy                                Int?
-  LastModifiedAt                                DateTime?     @default(now())
+  LastModifiedAt                                DateTime?     @default(now()) @db.DateTime
   User_OrganizationLicense_CreatedByToUser      User?         @relation("OrganizationLicense_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.CreatedBy")
   User_OrganizationLicense_LastModifiedByToUser User?         @relation("OrganizationLicense_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.LastModifiedBy")
   License                                       License?      @relation(fields: [LicenseId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_OrganizationLicense.LicenseId")
@@ -154,9 +154,9 @@ model Plantation {
   Name                                 String?       @db.VarChar(40)
   OrganizationId                       Int?
   CreatedBy                            Int?
-  CreatedAt                            DateTime?     @default(now())
+  CreatedAt                            DateTime?     @default(now()) @db.DateTime
   LastModifiedBy                       Int?
-  LastModifiedAt                       DateTime?     @default(now())
+  LastModifiedAt                       DateTime?     @default(now()) @db.DateTime
   User_Plantation_CreatedByToUser      User?         @relation("Plantation_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.CreatedBy")
   User_Plantation_LastModifiedByToUser User?         @relation("Plantation_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.LastModifiedBy")
   Organization                         Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Plantation.OrganizationId")
@@ -168,9 +168,9 @@ model Product {
   Name                              String?       @db.VarChar(40)
   OrganizationId                    Int?
   CreatedBy                         Int?
-  CreatedAt                         DateTime?     @default(now())
+  CreatedAt                         DateTime?     @default(now()) @db.DateTime
   LastModifiedBy                    Int?
-  LastModifiedAt                    DateTime?     @default(now())
+  LastModifiedAt                    DateTime?     @default(now()) @db.DateTime
   User_Product_CreatedByToUser      User?         @relation("Product_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.CreatedBy")
   User_Product_LastModifiedByToUser User?         @relation("Product_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.LastModifiedBy")
   Organization                      Organization? @relation(fields: [OrganizationId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Product.OrganizationId")
@@ -181,10 +181,9 @@ model Profile {
   Id             Int       @id(map: "PK__Profile__3214EC077B52CC8E") @default(autoincrement())
   Name           String?   @db.VarChar(40)
   CreatedBy      Int?
-  CreatedAt      DateTime? @default(now())
+  CreatedAt      DateTime? @default(now()) @db.DateTime
   LastModifiedBy Int?
-  LastModifiedAt DateTime? @default(now())
-  Description    String?   @db.VarChar(255)
+  LastModifiedAt DateTime? @default(now()) @db.DateTime
   User           User[]
 }
 
@@ -193,9 +192,9 @@ model Role {
   Name                           String?        @db.VarChar(40)
   OrganizationId                 Int?
   CreatedBy                      Int?
-  CreatedAt                      DateTime?      @default(now())
+  CreatedAt                      DateTime?      @default(now()) @db.DateTime
   LastModifiedBy                 Int?
-  LastModifiedAt                 DateTime?      @default(now())
+  LastModifiedAt                 DateTime?      @default(now()) @db.DateTime
   EmployeeRole                   EmployeeRole[]
   User_Role_CreatedByToUser      User?          @relation("Role_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Role.CreatedBy")
   User_Role_LastModifiedByToUser User?          @relation("Role_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Role.LastModifiedBy")
@@ -212,9 +211,9 @@ model User {
   ProfileId                                                    Int?
   Username                                                     String?               @db.VarChar(40)
   CreatedBy                                                    Int?
-  CreatedAt                                                    DateTime?             @default(now())
+  CreatedAt                                                    DateTime?             @default(now()) @db.DateTime
   LastModifiedBy                                               Int?
-  LastModifiedAt                                               DateTime?             @default(now())
+  LastModifiedAt                                               DateTime?             @default(now()) @db.DateTime
   Employee_Employee_CreatedByToUser                            Employee[]            @relation("Employee_CreatedByToUser")
   Employee_Employee_LastModifiedByToUser                       Employee[]            @relation("Employee_LastModifiedByToUser")
   EmployeeGroup_EmployeeGroup_CreatedByToUser                  EmployeeGroup[]       @relation("EmployeeGroup_CreatedByToUser")
@@ -255,9 +254,9 @@ model Weighing {
   ProductId                          Int?
   Weight                             Decimal?    @db.Decimal(11, 5)
   CreatedBy                          Int?
-  CreatedAt                          DateTime?   @default(now())
+  CreatedAt                          DateTime?   @default(now()) @db.DateTime
   LastModifiedBy                     Int?
-  LastModifiedAt                     DateTime?   @default(now())
+  LastModifiedAt                     DateTime?   @default(now()) @db.DateTime
   User_Weighing_CreatedByToUser      User?       @relation("Weighing_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.CreatedBy")
   Employee                           Employee?   @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.EmployeeId")
   User_Weighing_LastModifiedByToUser User?       @relation("Weighing_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Weighing.LastModifiedBy")
@@ -270,17 +269,17 @@ model WorkTime {
   Id                                 Int           @id(map: "PK__WorkTime__3214EC07EACEC190") @default(autoincrement())
   UserId                             Int?
   EmployeeId                         Int?
-  StartWork                          DateTime?
-  EndWork                            DateTime?
+  StartWork                          DateTime?     @db.DateTime
+  EndWork                            DateTime?     @db.DateTime
   OrganizationId                     Int?
   breakTime                          Int?
   WorkDuration                       Int?
   Status                             Boolean?
   Notes                              String?       @db.VarChar(255)
   CreatedBy                          Int?
-  CreatedAt                          DateTime?     @default(now())
+  CreatedAt                          DateTime?     @default(now()) @db.DateTime
   LastModifiedBy                     Int?
-  LastModifiedAt                     DateTime?     @default(now())
+  LastModifiedAt                     DateTime?     @default(now()) @db.DateTime
   User_WorkTime_CreatedByToUser      User?         @relation("WorkTime_CreatedByToUser", fields: [CreatedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.CreatedBy")
   Employee                           Employee?     @relation(fields: [EmployeeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.EmployeeId")
   User_WorkTime_LastModifiedByToUser User?         @relation("WorkTime_LastModifiedByToUser", fields: [LastModifiedBy], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WorkTime.LastModifiedBy")

@@ -184,6 +184,7 @@ model Profile {
   CreatedAt      DateTime? @default(now()) @db.DateTime
   LastModifiedBy Int?
   LastModifiedAt DateTime? @default(now()) @db.DateTime
+  Description    String?   @db.VarChar(255)
   User           User[]
 }
 
@@ -204,7 +205,7 @@ model Role {
 model User {
   Id                                                           Int                   @id(map: "PK__User__3214EC07638E9D76") @default(autoincrement())
   Name                                                         String?               @db.VarChar(40)
-  Password                                                     String?               @db.VarChar(40)
+  Password                                                     String?               @db.NVarChar(256)
   Email                                                        String?               @db.VarChar(320)
   Status                                                       Boolean?
   OrganizationId                                               Int?

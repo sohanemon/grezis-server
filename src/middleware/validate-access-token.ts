@@ -14,7 +14,7 @@ export const validateAccessToken: RequestHandler = (req, res, next) => {
     process.env.ACCESS_TOKEN_SECRET as string,
     (err: unknown) => {
       if (err) {
-        return res.status(401).json({ message: 'Invalid access token' });
+        return res.status(403).json({ message: 'Invalid access token' });
       }
       next();
     },

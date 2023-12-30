@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import jwt from 'jsonwebtoken';
 import { db } from '../lib/db.js';
+import { generateToken } from '../lib/utils.js';
 
 export const signupController: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
@@ -13,17 +13,14 @@ export const signupController: RequestHandler = async (req, res) => {
       data: {
         Email: email,
         Password: password,
-        Status: true,
-        ProfileId: 1,
       },
     });
 
-    const token = jwt.sign(
-      { email: user.Email, id: user.Id },
-      process.env.ACCESS_TOKEN_SECRET as string,
-    );
-    return res.status(200).json({ user, token });
+    const token = generateToken(user);
+
+    return res.status(200).json({ token });
   } catch (error) {
+    console.log('🛑 ~ signupController ~ error:', error);
     return res.status(500).json({ message: 'Error creating user' });
   }
 };

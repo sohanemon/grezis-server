@@ -5,6 +5,7 @@ import { checkModelExistence } from '../lib/utils.js';
 const getData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;
   const id = parseInt(req.query.id);
+  const organizationId = parseInt(req.query.organizationId);
 
   checkModelExistence(model, res);
 
@@ -18,7 +19,13 @@ const getData: RequestHandler = async (req: any, res) => {
       return res.status(200).json(data);
     }
 
-    const data = await (db[model] as any).findMany();
+    const data = await (db[model] as any).findMany({
+      where: {
+        OrganizationId: organizationId,
+      },
+    });
+    console.log('🛑 ~ data ~ data:', data);
+
     res.status(200).json(data);
   } catch (e) {
     console.log('🛑 ~ constdeleteData:RequestHandler= ~ e:', e);

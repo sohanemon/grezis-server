@@ -26,9 +26,7 @@ export const loginController: RequestHandler = async (req, res) => {
 
       if (result) {
         const token = generateToken(user);
-        return res
-          .status(200)
-          .json({ token, organizationId: user.OrganizationId });
+        return res.status(200).json({ token, ...user });
       }
 
       return res.status(401).json({ message: 'Invalid password' });

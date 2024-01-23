@@ -11,7 +11,7 @@ export const loginController: RequestHandler = async (req, res) => {
   }
 
   try {
-    const user = await db.user.findUnique({
+    const user = await db.user.findFirst({
       where: { Email: email },
     });
 

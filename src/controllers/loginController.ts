@@ -26,6 +26,7 @@ export const loginController: RequestHandler = async (req, res) => {
 
       if (result) {
         const token = generateToken(user);
+        res.cookie('organizationId', user.OrganizationId);
         return res.status(200).json({ token, ...user });
       }
 

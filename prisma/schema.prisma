@@ -167,6 +167,7 @@ model Plantation {
 model Product {
   Id                                Int           @id(map: "PK__Product__3214EC079F2EB6FB") @default(autoincrement())
   Name                              String?       @db.VarChar(40)
+  Notes                             String?       @db.VarChar(500)
   OrganizationId                    Int?
   CreatedBy                         Int?
   CreatedAt                         DateTime?     @default(now())

@@ -5,14 +5,10 @@ import { checkModelExistence } from '../lib/utils.js';
 const postData: RequestHandler = async (req: any, res) => {
   const model = req.params.model;
   checkModelExistence(model, res);
-  const organizationId = parseInt(req.query.organizationId);
 
   try {
     const data = await (db[model] as any).create({
-      data: {
-        ...req.body,
-        OrganizationId: organizationId,
-      },
+      data: req.body,
     });
 
     res.status(200).json({

@@ -3,11 +3,16 @@ import { db } from '../lib/db.js';
 import { checkModelExistence } from '../lib/utils.js';
 
 const postData: RequestHandler = async (req: any, res) => {
-  const model = req.params.model;
-  checkModelExistence(model, res);
+  const modelName = req.params.model;
+  const model = db[modelName] as any;
+  checkModelExistence(modelName, res);
+
+  if (!model.fields?.OrganizationId) {
+    delete req.body.OrganizationId;
+  }
 
   try {
-    const data = await (db[model] as any).create({
+    const data = await model.create({
       data: req.body,
     });
 

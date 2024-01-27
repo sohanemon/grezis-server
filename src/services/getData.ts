@@ -3,15 +3,17 @@ import { db } from '../lib/db.js';
 import { checkModelExistence } from '../lib/utils.js';
 
 const getData: RequestHandler = async (req: any, res) => {
-  const model = req.params.model;
+  const modelName = req.params.model;
+  const model = db[modelName] as any;
+
   const id = parseInt(req.query.id);
   const organizationId = parseInt(req.query.organizationId);
 
-  checkModelExistence(model, res);
+  checkModelExistence(modelName, res);
 
   try {
     if (id) {
-      const data = await (db[model] as any).findUnique({
+      const data = await model.findUnique({
         where: {
           Id: id,
         },
@@ -19,9 +21,9 @@ const getData: RequestHandler = async (req: any, res) => {
       return res.status(200).json(data);
     }
 
-    const data = await (db[model] as any).findMany({
+    const data = await model.findMany({
       where: {
-        OrganizationId: organizationId,
+        OrganizationId: model.fields?.OrganizationId && organizationId,
       },
     });
     console.log('🛑 ~ data ~ data:', data);

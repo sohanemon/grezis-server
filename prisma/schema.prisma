@@ -14,6 +14,7 @@ model Employee {
   OrganizationId                     Int?
   Birthday                           DateTime?       @db.Date
   Contact                            String?         @db.VarChar(40)
+  Barcode                            String?         @unique @db.VarChar(40)
   Email                              String?         @db.VarChar(320)
   CreatedBy                          Int?
   CreatedAt                          DateTime?       @default(now())

@@ -26,7 +26,6 @@ const getData: RequestHandler = async (req: any, res) => {
         OrganizationId: model.fields?.OrganizationId && organizationId,
       },
     });
-    console.log('🛑 ~ data ~ data:', data);
 
     res.status(200).json(data);
   } catch (e) {

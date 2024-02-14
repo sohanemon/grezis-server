@@ -278,7 +278,7 @@ model WorkTime {
   OrganizationId                     Int?
   breakTime                          Int?
   WorkDuration                       Int?
-  Status                             Boolean?
+  Status                             Boolean?      @default(false)
   Notes                              String?       @db.VarChar(255)
   CreatedBy                          Int?
   CreatedAt                          DateTime?     @default(now())

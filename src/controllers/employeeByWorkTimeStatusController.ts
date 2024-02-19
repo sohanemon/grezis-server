@@ -16,39 +16,23 @@ export const employeeByWorkTimeStatusController: RequestHandler = async (
   const organizationId = parseInt(req.query.organizationId);
 
   try {
-    const data = await db.employee.findMany({
-      where: {
-        WorkTime:
-          status === 'true'
-            ? {
-                some: {
-                  Status: null,
-                },
-              }
-            : {
-                some: {
-                  Status: {
-                    not: {
-                      equals: true,
-                    },
-                  },
-                },
-              },
-        OrganizationId: model.fields?.OrganizationId && organizationId,
-      },
-    });
-    console.log(
-      'result',
-      await db.employee.findMany({
+    let data;
+    if (status === 'true') {
+      data = await db.workTime.findMany({
         where: {
-          WorkTime: {
-            some: {
-              Status: true,
-            },
-          },
+          Status: true,
+          OrganizationId: model.fields?.OrganizationId && organizationId,
         },
-      }),
-    );
+      });
+    } else {
+      data = await db.employee.findMany({
+        where: {
+          WorkTime: false,
+          OrganizationId: model.fields?.OrganizationId && organizationId,
+        },
+      });
+    }
+    console.log(data);
     return res.status(200).json(data);
   } catch (e) {
     console.log('🛑 ~ constdeleteData:RequestHandler= ~ e:', e);
